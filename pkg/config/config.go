@@ -7,7 +7,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func loadConfig(configPath string) (*db.DB, error) {
+func LoadConfig(configPath string) (*db.DB, error) {
 	var config db.DB
 
 	file, err := os.ReadFile(configPath)
