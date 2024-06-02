@@ -1,4 +1,4 @@
-package sqldb
+package proxy
 
 import (
 	"database/sql"
