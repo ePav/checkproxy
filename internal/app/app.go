@@ -5,7 +5,7 @@ import (
 	"checkproxy/pkg/mysql"
 
 	//"checkproxy/pkg/db"
-	"checkproxy/internal/repository/sqldb"
+	"checkproxy/internal/repository/proxy"
 	"log"
 )
 
@@ -22,7 +22,7 @@ func Execute() {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
-	rowsdb, err := sqldb.QueryDB(connect)
+	rowsdb, err := proxy.QueryDB(connect)
 	if err != nil {
 		log.Fatalf("Error queringing on database: %v", err)
 	}

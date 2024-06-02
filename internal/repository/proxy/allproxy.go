@@ -5,7 +5,13 @@ import (
 	"log"
 )
 
-func QueryDB(connect *sql.DB) (*sql.Rows, error) {
+type Proxy struct {
+	Domain   string
+	Ip       string
+	Location string
+}
+
+func QueryDB(connect *sql.DB) ([]Proxy, error) {
 	rows, err := connect.Query("Select domain, ip, location From proxy")
 	if err != nil {
 		return nil, err
@@ -17,5 +23,14 @@ func QueryDB(connect *sql.DB) (*sql.Rows, error) {
 		}
 	}()
 
-	return rows, nil
+	var proxies []Proxy
+	for rows.Next() {
+		var proxy Proxy
+		err := rows.Scan(&proxy.Domain, &proxy.Ip, &proxy.Location)
+		if err != nil {
+			return nil, err
+		}
+		proxies = append(proxies, proxy)
+	}
+	return proxies, nil
 }
