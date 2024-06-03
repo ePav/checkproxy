@@ -22,7 +22,7 @@ func Execute() {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
-	rowsdb, err := proxy.QueryDB(connect)
+	allproxies, err := proxy.QueryDB(connect)
 	if err != nil {
 		log.Fatalf("Error queringing on database: %v", err)
 	}
