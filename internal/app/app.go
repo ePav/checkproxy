@@ -4,8 +4,9 @@ import (
 	conf "checkproxy/pkg/config"
 	"checkproxy/pkg/mysql"
 
-	//"checkproxy/pkg/db"
 	"checkproxy/internal/repository/proxy"
+	"checkproxy/internal/service"
+
 	"log"
 )
 
@@ -27,4 +28,5 @@ func Execute() {
 		log.Fatalf("Error queringing on database: %v", err)
 	}
 
+	service.Checkproxy(allproxies)
 }

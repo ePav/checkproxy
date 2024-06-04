@@ -7,15 +7,16 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-func LoadConfig(configPath string) (*db.DB, error) {
-	var config db.DB
+func LoadConfig(configPath string) (*db.Dbsource, error) {
+	var config db.Dbsource
 
-	file, err := os.ReadFile(configPath)
+	file, err := os.Open(configPath)
 	if err != nil {
 		return nil, err
 	}
 
-	err = yaml.Unmarshal(file, &config)
+	decoder := yaml.NewDecoder(file)
+	err = decoder.Decode(&config)
 	if err != nil {
 		return nil, err
 	}

@@ -12,7 +12,7 @@ type Proxy struct {
 }
 
 func QueryDB(connect *sql.DB) ([]Proxy, error) {
-	rows, err := connect.Query("Select domain, ip, location From proxy")
+	rows, err := connect.Query("SELECT domain, ip, location FROM proxy")
 	if err != nil {
 		return nil, err
 	}

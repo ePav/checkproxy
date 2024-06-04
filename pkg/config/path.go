@@ -2,6 +2,7 @@ package config
 
 import (
 	"flag"
+	"os"
 )
 
 func Path() (Path string) {
@@ -10,7 +11,7 @@ func Path() (Path string) {
 	flag.Parse()
 
 	if configPath == "" {
-		configPath = "internal/repository/config/config.yml"
+		configPath = os.Getenv("PROXY_GEO_CONFIG")
 	}
 	return configPath
 }
