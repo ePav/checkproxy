@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func Path() (Path string) {
+func Path() (path string) {
 	var configPath string
 	flag.StringVar(&configPath, "c", "", "Path to config")
 	flag.Parse()

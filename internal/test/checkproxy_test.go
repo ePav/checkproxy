@@ -1,4 +1,4 @@
-package service
+package test
 
 import (
 	"checkproxy/internal/repository/proxy"
@@ -38,13 +38,16 @@ func seedTestDB(connect *sql.DB) error {
 	_, err = connect.Exec(`
 		INSERT INTO proxy (domain, ip, location) VALUES
 		('ProxyLine-us.pxl', '93.184.216.34', 'US'),
-		('ProxyLine-tr.pxl', '93.184.216.34', 'TR');
+		('ProxyLine-tr.pxl', '38.180.112.170', 'TR');
 	`)
 	return err
 }
 
 func cleanupTestDB(connect *sql.DB) {
-	connect.Exec("DROP TABLE IF EXISTS proxy;")
+	_, err := connect.Exec("DROP TABLE IF EXISTS proxy;")
+	if err != nil {
+		fmt.Printf("Failed to drop table: %v", err)
+	}
 	connect.Close()
 }
 
@@ -65,36 +68,38 @@ func TestCheckproxy(t *testing.T) {
 		t.Fatalf("Error querying test database: %v", err)
 	}
 
-	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', tabwriter.AlignRight|tabwriter.Debug)
-
-	mmDB, err := op.Openmmdb()
-	if err != nil {
-		t.Fatalf("Error opening Maxmind database: %v", err)
-	}
-	ip2lDB, err := op.Openip2ldb()
+	ip2lDB, err := op.Openip2ldb("/Users/mac/golang/checkproxy/internal/repository/config/IP-COUNTRY-SAMPLE.BIN")
 	if err != nil {
 		t.Fatalf("Error opening Ip2location database: %v", err)
 	}
+	mmDB, err := op.Openmmdb("/Users/mac/golang/checkproxy/internal/repository/config/GeoLite2-Country.mmdb")
+	if err != nil {
+		t.Fatalf("Error opening Maxmind database: %v", err)
+	}
+	defer mmDB.Close()
+	defer ip2lDB.Close()
+
+	writer := tabwriter.NewWriter(os.Stdout, 0, 0, 5, ' ', tabwriter.AlignRight|tabwriter.Debug)
 
 	for _, proxy := range allproxies {
 		if proxy.Domain == "local" {
 			continue
 		}
 
-		recordip2l, err := ip2lDB.Get_country_short(proxy.Ip)
+		recordip2l, err := ip2lDB.Get_country_short(proxy.IP)
 		if err != nil {
 			t.Fatalf("Error ip2location: %v", err)
 		}
 
-		recordmm, err := mmDB.Country(net.ParseIP(proxy.Ip))
+		recordmm, err := mmDB.Country(net.ParseIP(proxy.IP))
 		if err != nil {
 			t.Fatalf("Error Maxmind: %v", err)
 		}
 
 		if assert.Equal(t, proxy.Location, recordip2l.Country_short) && assert.Equal(t, proxy.Location, recordmm.Country.IsoCode) {
-			fmt.Printf("%s\t%s\t%s\tip2l OK, mm OK \n", proxy.Domain, proxy.Ip, proxy.Location)
+			fmt.Printf("%s\t%s\t%s\tip2l OK, mm OK \n", proxy.Domain, proxy.IP, proxy.Location)
 		} else {
-			fmt.Printf("%s\t%s\t%s\tError: ip2l %s, mm %s \n", proxy.Domain, proxy.Ip, proxy.Location, recordip2l.Country_short, recordmm.Country.IsoCode)
+			fmt.Printf("%s\t%s\t%s\tError: ip2l %s, mm %s \n", proxy.Domain, proxy.IP, proxy.Location, recordip2l.Country_short, recordmm.Country.IsoCode)
 		}
 		writer.Flush()
 	}

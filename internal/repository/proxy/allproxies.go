@@ -7,7 +7,7 @@ import (
 
 type Proxy struct {
 	Domain   string
-	Ip       string
+	IP       string
 	Location string
 }
 
@@ -26,7 +26,7 @@ func QueryDB(connect *sql.DB) ([]Proxy, error) {
 	var proxies []Proxy
 	for rows.Next() {
 		var proxy Proxy
-		err := rows.Scan(&proxy.Domain, &proxy.Ip, &proxy.Location)
+		err := rows.Scan(&proxy.Domain, &proxy.IP, &proxy.Location)
 		if err != nil {
 			return nil, err
 		}

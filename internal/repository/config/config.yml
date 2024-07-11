@@ -1,6 +1,8 @@
 db:
-  host: ""
+  host: "127.0.0.1"
   port: 3306
-  user: ""
-  password: ""
-  name: ""
+  user: "test"
+  password: "****"
+  name: "test"
+  ip2l: "path to ip2l db"
+  mm: "path to mm db"

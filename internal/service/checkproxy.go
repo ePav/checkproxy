@@ -11,14 +11,14 @@ import (
 	"text/tabwriter"
 )
 
-func Checkproxy(allproxies []proxy.Proxy) {
-	mmdb, err := op.Openmmdb()
+func Checkproxy(allproxies []proxy.Proxy, config *op.Dbsource) {
+	mmdb, err := op.Openmmdb(config.Database.Maxmind)
 	if err != nil {
-		log.Fatalf("Error opening Maxmind database: %v", err)
+		log.Printf("Error opening Maxmind database: %v", err)
 	}
-	ip2ldb, err := op.Openip2ldb()
+	ip2ldb, err := op.Openip2ldb(config.Database.IP2Location)
 	if err != nil {
-		log.Fatalf("Error opening Ip2location database: %v", err)
+		log.Printf("Error opening Ip2location database: %v", err)
 	}
 
 	defer mmdb.Close()
@@ -31,22 +31,21 @@ func Checkproxy(allproxies []proxy.Proxy) {
 			continue
 		}
 
-		recordip2l, err := ip2ldb.Get_country_short(proxy.Ip)
+		recordip2l, err := ip2ldb.Get_country_short(proxy.IP)
 		if err != nil {
-			log.Fatalf("Error ip2location: %v", err)
+			log.Printf("Error ip2location: %v", err)
 		}
 
-		recordmm, err := mmdb.Country(net.ParseIP(proxy.Ip))
+		recordmm, err := mmdb.Country(net.ParseIP(proxy.IP))
 		if err != nil {
-			log.Fatalf("Error Maxmind: %v", err)
+			log.Printf("Error Maxmind: %v", err)
 		}
 
 		if recordip2l.Country_short == proxy.Location && recordmm.Country.IsoCode == proxy.Location {
-			fmt.Printf("%s\t%s\t%s\tip2l OK, mm OK \n", proxy.Domain, proxy.Ip, proxy.Location)
+			fmt.Printf("%s\t%s\t%s\tip2l OK, mm OK \n", proxy.Domain, proxy.IP, proxy.Location)
 		} else {
-			fmt.Printf("%s\t%s\t%s\tError: ip2l %s, mm %s \n", proxy.Domain, proxy.Ip, proxy.Location, recordip2l.Country_short, recordmm.Country.IsoCode)
+			fmt.Printf("%s\t%s\t%s\tError: ip2l %s, mm %s \n", proxy.Domain, proxy.IP, proxy.Location, recordip2l.Country_short, recordmm.Country.IsoCode)
 		}
 		writer.Flush()
 	}
-
 }

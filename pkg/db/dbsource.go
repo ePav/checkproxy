@@ -1,13 +1,15 @@
 package db
 
-type Db struct {
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	User     string `yaml:"user"`
-	Password string `yaml:"password"`
-	Name     string `yaml:"name"`
+type DB struct {
+	Host        string `yaml:"host"`
+	Port        int    `yaml:"port"`
+	User        string `yaml:"user"`
+	Password    string `yaml:"password"`
+	Name        string `yaml:"name"`
+	IP2Location string `yaml:"ip2l"`
+	Maxmind     string `yaml:"mm"`
 }
 
 type Dbsource struct {
-	Database Db `yaml:"db"`
+	Database DB `yaml:"db"`
 }

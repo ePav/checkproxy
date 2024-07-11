@@ -18,7 +18,7 @@ func Execute() {
 		log.Fatalf("Error loading config: %v", err)
 	}
 
-	connect, err := mysql.ConnectMySQL(*config)
+	connect, err := mysql.ConnectMySQL(config)
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
@@ -28,5 +28,5 @@ func Execute() {
 		log.Fatalf("Error queringing on database: %v", err)
 	}
 
-	service.Checkproxy(allproxies)
+	service.Checkproxy(allproxies, config)
 }
