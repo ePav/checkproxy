@@ -7,12 +7,24 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 	"text/tabwriter"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/stretchr/testify/assert"
 )
+
+func GetProjectPath() (string, error) {
+	_, b, _, ok := runtime.Caller(0)
+	if !ok {
+		return "", fmt.Errorf("unable to obtain project path")
+	}
+
+	root := filepath.Join(filepath.Dir(b), "..", "..")
+	return root, nil
+}
 
 func setupTestDB() (*sql.DB, error) {
 	url := "testuser:testpassword@tcp(127.0.0.1:3306)/testdb"
@@ -68,11 +80,15 @@ func TestCheckproxy(t *testing.T) {
 		t.Fatalf("Error querying test database: %v", err)
 	}
 
-	ip2lDB, err := op.Openip2ldb("/Users/mac/golang/checkproxy/internal/repository/config/IP-COUNTRY-SAMPLE.BIN")
+	pathProject, err := GetProjectPath()
+	if err != nil {
+		t.Fatalf("Failed to get project path: %v", err)
+	}
+	ip2lDB, err := op.Openip2ldb(pathProject + "/internal/repository/config/IP-COUNTRY-SAMPLE.BIN")
 	if err != nil {
 		t.Fatalf("Error opening Ip2location database: %v", err)
 	}
-	mmDB, err := op.Openmmdb("/Users/mac/golang/checkproxy/internal/repository/config/GeoLite2-Country.mmdb")
+	mmDB, err := op.Openmmdb(pathProject + "/internal/repository/config/GeoLite2-Country.mmdb")
 	if err != nil {
 		t.Fatalf("Error opening Maxmind database: %v", err)
 	}

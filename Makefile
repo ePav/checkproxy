@@ -6,7 +6,7 @@ lint:
 
 it:
 	@ docker compose up -d
-	@ go test -count=1 -v ./...
+	@ go test -count=1 -v ./internal/test
 	@ docker compose down
 
 build:
