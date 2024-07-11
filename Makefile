@@ -1,5 +1,5 @@
 run:
-	@ PROXY_GEO_CONFIG=../test1/config.yml go run cmd/cli/main.go
+	@ PROXY_GEO_CONFIG=internal/repository/config/config.yml go run cmd/cli/main.go
 
 lint:
 	@ golangci-lint run

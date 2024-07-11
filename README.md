@@ -1,5 +1,7 @@
 ```markdown
 # CHECKPROXY
+CheckProxy - это инструмент для проверки прокси-серверов, написанный на Go.
+
 ## Project Structure
 checkproxy
 ├── cmd                          cmd.(Точка входа)
@@ -23,6 +25,9 @@ checkproxy
 │ │
 │ └── service                    service.(Бизнес логика)
 │ └── checkproxy.go
+| |
+│ └── test                       test.(Тестирование)
+│ └── checkproxy_test.go
 │
 └── pkg                          pkg.(Вспомогательные утилиты и зависимости)
 ├── config                       config.(Взаимодействие с конфигом)
@@ -37,5 +42,23 @@ checkproxy
 │ └── openmmdb.go
 │
 └── mysql                        mysql.(Подключение к БД)
-└── connector.go
-  
+  └── connector.go
+
+## Config structure
+Основной конфиг находится в checkproxy/internal/repository/config/config.yml, выглядит следующим образом
+
+```yaml
+db:
+  host: "127.0.0.1"
+  port: 3306
+  user: "test"
+  password: "test"
+  name: "test"
+  ip2l: "Путь до базы IP2Location"
+  mm: "Путь до базы MaxMind"
+  ```
+### Запуск в CLI
+```sh
+go run cmd/cli/main.go -c checkproxy/internal/repository/config/config.yml
+```
+Путь передается с помощью ключа ```-c``` или указывается в переменной ```PROXY_GEO_CONFIG``` на системном уровне, или в файле **Makefile** с последующим запуском ```make run```
