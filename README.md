@@ -1,8 +1,9 @@
-```markdown
 # CHECKPROXY
+```
 CheckProxy - это инструмент для проверки прокси-серверов, написанный на Go.
-
+```
 ## Project Structure
+```
 checkproxy
 ├── cmd                          cmd.(Точка входа)
 │ └── cli
@@ -43,10 +44,10 @@ checkproxy
 │
 └── mysql                        mysql.(Подключение к БД)
   └── connector.go
-
+```
 ## Config structure
-Основной конфиг находится в checkproxy/internal/repository/config/config.yml, выглядит следующим образом
-
+Основной конфиг находится в **checkproxy/internal/repository/config/config.yml**, выглядит следующим образом
+```
 ```yaml
 db:
   host: "127.0.0.1"
