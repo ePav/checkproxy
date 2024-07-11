@@ -1,7 +1,7 @@
 # CHECKPROXY
-```
+
 CheckProxy - это инструмент для проверки прокси-серверов, написанный на Go.
-```
+
 ## Project Structure
 ```
 checkproxy
