@@ -6,7 +6,7 @@ lint:
 
 it:
 	@ docker compose up -d
-	@ PROXY_GEO_CONFIG=internal/repository/config/config.yml go test -count=1 -v ./...
+	@ go test -count=1 -v ./...
 	@ docker compose down
 
 build:

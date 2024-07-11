@@ -58,6 +58,17 @@ db:
   ip2l: "Путь до базы IP2Location"
   mm: "Путь до базы MaxMind"
   ```
+
+## Run locally
+Для работы потребуется версия Go >= **1.22.3**
+### Сборка 
+Собрать можно командой ```make build```
+
+### Тестирование
+Запустить тестирование можно командой ```make it``` , убедитесь что у вас установле **Docker** и **Docker-Compose**
+
+
+
 ### Запуск в CLI
 ```sh
 go run cmd/cli/main.go -c checkproxy/internal/repository/config/config.yml
