@@ -75,7 +75,7 @@ func TestCheckproxy(t *testing.T) {
 		t.Fatalf("Failed to seed test database: %v", err)
 	}
 
-	allproxies, err := proxy.QueryDB(connect)
+	allproxies, err := proxy.GetAll(connect)
 	if err != nil {
 		t.Fatalf("Error querying test database: %v", err)
 	}

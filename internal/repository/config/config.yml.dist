@@ -1,0 +1,8 @@
+db:
+  host: db_host
+  port: db_port
+  user: db_user
+  password: db_password
+  name: db_name
+  ip2l: path_to_file
+  mm: path_to_file

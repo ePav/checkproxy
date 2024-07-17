@@ -23,10 +23,12 @@ func Execute() {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
 
-	allproxies, err := proxy.QueryDB(connect)
+	proxies, err := proxy.GetAll(connect)
 	if err != nil {
 		log.Fatalf("Error queringing on database: %v", err)
 	}
 
-	service.Checkproxy(allproxies, config)
+	if err := service.Checkproxy(proxies, config); err != nil {
+		log.Fatalf("Error checking proxy: %v", err)
+	}
 }
